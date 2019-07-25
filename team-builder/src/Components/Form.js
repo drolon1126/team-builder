@@ -12,6 +12,7 @@ export default function Form(props) {
     }else{
       props.setTeam([...props.team, member]);
     }
+    setMember({ name: '', email: '', role: '' });
   }
 
 
@@ -21,8 +22,11 @@ export default function Form(props) {
   }
 
   useEffect(()=>{
+    if(props.memberToEdit.name){
+      setIsEditing(true);
+      console.log("this is the thing " +JSON.stringify(props.memberToEdit)); 
+    }
     setMember(props.memberToEdit); 
-    setIsEditing(true); 
   },[props.memberToEdit])
   
   return (
