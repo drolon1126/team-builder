@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    backgroundColor:'cadetblue'
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -36,6 +37,10 @@ const useStyles = makeStyles(theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+  },
+  drawerPaperEdit: {
+    width: drawerWidth,
+    backgroundColor:'skyblue'
   },
   content: {
     flexGrow: 1,
@@ -48,6 +53,12 @@ function App() {
   const classes = useStyles();
   const [team, setTeam] = useState([]);
   const [memberToEdit, setMemberToEdit] = useState({});
+  const [isEditing,setIsEditing] = useState(false);
+
+  function removeMember(mem){;
+    team.splice(mem,1);
+    setTeam([...team]);
+  }
 
   function editMember(editedMember) {
     const tmpTeam = team.map(member => {
@@ -73,24 +84,24 @@ function App() {
         className={classes.drawer}
         variant="permanent"
         classes={{
-          paper: classes.drawerPaper,
+          paper: isEditing ? classes.drawerPaperEdit : classes.drawerPaper,
         }}
         anchor="left"
       >
         <div className={classes.toolbar} />
         <Divider />
         <div className={classes.formWrap}>
-          <Form setTeam={setTeam} team={team} memberToEdit={memberToEdit} editMember={editMember} />
+          <Form setTeam={setTeam} team={team} memberToEdit={memberToEdit} editMember={editMember} isEditing={isEditing} setIsEditing={setIsEditing}/>
         </div>
       </Drawer>
 
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container spacing={2}>
-          {team.map((member) => {
+          {team.map((member,i) => {
             return (
               <Grid item xs>
-                <Paper className={classes.paper}><MemberCard member={member} setMemberToEdit={setMemberToEdit} /></Paper>
+                <Paper className={classes.paper}><MemberCard index={i} member={member} setMemberToEdit={setMemberToEdit} removeMember={removeMember}/></Paper>
               </Grid>
             );
           })}
